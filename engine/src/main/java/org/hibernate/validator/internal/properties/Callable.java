@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
 
 import org.hibernate.validator.internal.util.ExecutableHelper;
 import org.hibernate.validator.internal.util.ExecutableParameterNameProvider;
+import org.hibernate.validator.internal.util.Signature;
 
 /**
  * @author Marko Bekhta
@@ -31,7 +32,7 @@ public interface Callable extends Constrainable {
 
 	boolean isPrivate();
 
-	String getSignature();
+	Signature getSignature();
 
 	boolean overrides(ExecutableHelper executableHelper, Callable superTypeMethod);
 

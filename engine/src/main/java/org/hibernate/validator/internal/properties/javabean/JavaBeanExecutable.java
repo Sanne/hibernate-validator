@@ -24,6 +24,7 @@ import org.hibernate.validator.internal.util.CollectionHelper;
 import org.hibernate.validator.internal.util.ExecutableHelper;
 import org.hibernate.validator.internal.util.ExecutableParameterNameProvider;
 import org.hibernate.validator.internal.util.ReflectionHelper;
+import org.hibernate.validator.internal.util.Signature;
 import org.hibernate.validator.internal.util.TypeHelper;
 import org.hibernate.validator.internal.util.logging.Log;
 import org.hibernate.validator.internal.util.logging.LoggerFactory;
@@ -91,7 +92,7 @@ public abstract class JavaBeanExecutable<T extends Executable> implements Callab
 	}
 
 	@Override
-	public String getSignature() {
+	public Signature getSignature() {
 		return ExecutableHelper.getSignature( executable );
 	}
 

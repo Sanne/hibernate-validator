@@ -38,6 +38,7 @@ import org.hibernate.validator.internal.properties.DefaultGetterPropertySelectio
 import org.hibernate.validator.internal.properties.javabean.JavaBeanHelper;
 import org.hibernate.validator.internal.util.ExecutableHelper;
 import org.hibernate.validator.internal.util.ExecutableParameterNameProvider;
+import org.hibernate.validator.internal.util.Signature;
 import org.hibernate.validator.internal.util.TypeResolutionHelper;
 import org.hibernate.validator.test.internal.metadata.ConsistentDateParameters;
 import org.hibernate.validator.test.internal.metadata.Customer;
@@ -151,9 +152,8 @@ public class ExecutableMetaDataTest {
 		Method method = CustomerRepositoryExt.class.getMethod( "createCustomer", CharSequence.class, String.class );
 		ExecutableMetaData methodMetaData = beanMetaData.getMetaDataFor( method ).get();
 
-		assertThat( methodMetaData.getSignatures() ).containsOnly(
-				"createCustomer(java.lang.CharSequence,java.lang.String)"
-		);
+		assertThat( methodMetaData.getSignatures() ).hasSize( 1 );
+		assertThat( methodMetaData.getSignatures().iterator().next().toString() ).isEqualTo( "createCustomer(java.lang.CharSequence, java.lang.String)" );
 	}
 
 	@Test
@@ -161,7 +161,8 @@ public class ExecutableMetaDataTest {
 		Method method = CustomerRepositoryExt.class.getMethod( "foo" );
 		ExecutableMetaData methodMetaData = beanMetaData.getMetaDataFor( method ).get();
 
-		assertThat( methodMetaData.getSignatures() ).containsOnly( "foo()" );
+		assertThat( methodMetaData.getSignatures() ).hasSize( 1 );
+		assertThat( methodMetaData.getSignatures().iterator().next().toString() ).isEqualTo( "foo()" );
 	}
 
 	@Test
@@ -169,7 +170,8 @@ public class ExecutableMetaDataTest {
 		Constructor<CustomerRepositoryExt> constructor = CustomerRepositoryExt.class.getConstructor( String.class );
 		ExecutableMetaData constructorMetaData = beanMetaData.getMetaDataFor( constructor ).get();
 
-		assertThat( constructorMetaData.getSignatures() ).containsOnly( "CustomerRepositoryExt(java.lang.String)" );
+		assertThat( constructorMetaData.getSignatures() ).hasSize( 1 );
+		assertThat( constructorMetaData.getSignatures().iterator().next().toString() ).isEqualTo( "CustomerRepositoryExt(java.lang.String)" );
 	}
 
 	@Test
@@ -181,7 +183,7 @@ public class ExecutableMetaDataTest {
 
 		assertThat( methodMetaData.getSignatures() )
 			.describedAs( "Expecting super-type and sub-type method signatures" )
-			.containsOnly( "createJob(java.lang.Object)", "createJob(java.util.UUID)" );
+			.containsOnly( new Signature( "createJob", new Class[]{Object.class} ), new Signature( "createJob", new Class[]{UUID.class} ) );
 
 		method = JobRepository.class.getMethod( "createJob", Object.class );
 		beanMetaData = beanMetaDataManager.getBeanMetaData( JobRepository.class );
@@ -189,7 +191,7 @@ public class ExecutableMetaDataTest {
 
 		assertThat( methodMetaData.getSignatures() )
 			.describedAs( "Expecting only super-type method signature" )
-			.containsOnly( "createJob(java.lang.Object)" );
+			.containsOnly( new Signature( "createJob", new Class[]{Object.class} ) );
 
 		method = SpecialJobRepositoryImpl.class.getMethod( "createJob", Object.class );
 		beanMetaData = beanMetaDataManager.getBeanMetaData( SpecialJobRepositoryImpl.class );
@@ -197,7 +199,7 @@ public class ExecutableMetaDataTest {
 
 		assertThat( methodMetaData.getSignatures() )
 			.describedAs( "Expecting method signatures from super-types" )
-			.containsOnly( "createJob(java.lang.Object)", "createJob(java.util.UUID)" );
+			.containsOnly( new Signature( "createJob", new Class[]{Object.class} ), new Signature( "createJob", new Class[]{UUID.class} ) );
 	}
 
 	@Test
@@ -209,7 +211,7 @@ public class ExecutableMetaDataTest {
 
 		assertThat( methodMetaData.getSignatures() )
 			.describedAs( "Expecting sub-type method signature which overloads but not overrides super-type methods" )
-			.containsOnly( "createJob(java.lang.String)" );
+			.containsOnly( new Signature( "createJob", new Class[]{String.class} ) );
 	}
 
 	@Test

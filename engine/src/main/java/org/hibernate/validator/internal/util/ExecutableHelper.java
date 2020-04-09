@@ -175,30 +175,16 @@ public final class ExecutableHelper {
 		return executable instanceof Constructor ? executable.getDeclaringClass().getSimpleName() : executable.getName();
 	}
 
-	public static String getSignature(Executable executable) {
+	public static Signature getSignature(Executable executable) {
 		return getSignature( getSimpleName( executable ), executable.getParameterTypes() );
 	}
 
 	/**
-	 * This method needs to be fast.
-	 * <p>
-	 * The purpose of it is to get uniqueness, we don't really care about prettiness.
+	 * Generate a unique signature for the method to be used in map lookups.
+	 * Needs to be efficient.
 	 */
-	public static String getSignature(String name, Class<?>[] parameterTypes) {
-		StringBuilder signature = new StringBuilder( name.length() + 2 + parameterTypes.length * 25 );
-		signature.append( name ).append( '(' );
-		boolean separator = false;
-		for ( Class<?> parameterType : parameterTypes ) {
-			if ( separator ) {
-				signature.append( ',' );
-			}
-			else {
-				separator = true;
-			}
-			signature.append( parameterType.getName() );
-		}
-		signature.append( ')' );
-		return signature.toString();
+	public static Signature getSignature(String name, Class<?>[] parameterTypes) {
+		return new Signature( name, parameterTypes );
 	}
 
 	/**
