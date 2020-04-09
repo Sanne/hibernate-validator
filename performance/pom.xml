@@ -21,6 +21,9 @@
     <description>Hibernate Validator performance tests.</description>
 
     <properties>
+        <!-- Disable enforcer as we are using banned dependencies for old versions -->
+        <enforcer.skip>true</enforcer.skip>
+
         <!--
         Need to specify something, since the plugin cannot handle empty options. Using something which does not have
         any runtime effects. The actual profiling options are either passed via the command line or set via a profile.
